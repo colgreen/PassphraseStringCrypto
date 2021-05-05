@@ -65,8 +65,8 @@ namespace PassphraseStringCrypto
         private static void PrintHelp()
         {
             Console.WriteLine("Format is:");
-            Console.WriteLine("  crypto encrypt \"<plaintext>\" \"<passphrase>\"");
-            Console.WriteLine("  crypto decrypt \"<ciphertext>\" \"<passphrase>\"");
+            Console.WriteLine("  scrypto encrypt \"<plaintext>\" \"<passphrase>\"");
+            Console.WriteLine("  scrypto decrypt \"<ciphertext>\" \"<passphrase>\"");
             Console.WriteLine("");
         }
     }
