@@ -6,4 +6,8 @@
     <AssemblyName>scrypto</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="PassphraseStringCryptoTests" />
+  </ItemGroup>
+
 </Project>
