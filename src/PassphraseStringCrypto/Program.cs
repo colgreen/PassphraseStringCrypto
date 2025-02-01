@@ -24,8 +24,8 @@ public class Program
         }
         else
         {
-            string decryptedString = Decrypt(text, passphrase);
-            Console.WriteLine(decryptedString);
+            string plaintext = Decrypt(text, passphrase);
+            Console.WriteLine(plaintext);
         }
     }
 
