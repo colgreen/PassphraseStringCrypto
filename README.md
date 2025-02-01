@@ -33,8 +33,8 @@ Decryption usage:
     
 Examples:
 
-    scrypto decrypt "VUuW8IKdZkIf4dXHKQ^EadXjuZ4AEkqeg2CYRac#h5TKDZDxcSWE6Mjek2swf6Ra8^DxhgY~qck=" password123
-    scrypto encrypt "VUuW8IKd ZkIf4dXH KQ^EadXj uZ4AEkqe g2CYRac# h5TKDZDx cSWE6Mje k2swf6Ra 8^DxhgY~ qck=" "password 123"
+    scrypto decrypt "VUuW8IKdZkIf4dXHKQ^EadXjuZ4AEkqeg2CYRac#h5TKDZDxcSWE6Mjek2swf6Ra8^DxhgY~qck=" "password 123"
+    scrypto decrypt "VUuW8IKd ZkIf4dXH KQ^EadXj uZ4AEkqe g2CYRac# h5TKDZDx cSWE6Mje k2swf6Ra 8^DxhgY~ qck=" "password 123"
     
 Example decryption output:
 
@@ -47,7 +47,7 @@ the shell or command window you are using interprets the arguments. For the decr
 always wrap the ciphertext argument in double quotes, as some of the base64 characters are special characters in most
 command shells.
 
-The base64 alternative alphabet is the same as the standard base64 alphabet, with the following substitions:
+The base64 alternative alphabet is the same as the standard base64 alphabet, with the following substitutions:
 
     0 (digit zero)    ->  $
     1 (digit 1)       ->  #
@@ -59,12 +59,7 @@ The base64 alternative alphabet is the same as the standard base64 alphabet, wit
 
 The passphrase is transformed into an encryption key using PBKDF2 using a random 8 byte (64 bit) salt.
 
-Encryption is peformed using the Advanced Encryption Standard (AES) in Galois/Counter Mode (GCM); this 
+Encryption is performed using the Advanced Encryption Standard (AES) in Galois/Counter Mode (GCM); this 
 uses a further 12 random nonce bytes. The PBKDF2 salt and AEC-GCM nonce bytes are encoded in the output,
 and therefore repeated calls to encrypt the same string with the same passphrase will produce completely
 different output.
-
-
-
-    
-    
