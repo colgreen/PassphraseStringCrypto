@@ -36,9 +36,9 @@ internal static class Base64Utils
         return new string(arr);
     }
 
-    public static byte[] FromAlternativeBase64(string abase64)
+    public static byte[] FromAlternativeBase64(string altBase64)
     {
-        char[] arr = abase64.ToCharArray();
+        char[] arr = altBase64.ToCharArray();
 
         for(int i=0; i < arr.Length; i++)
         {
