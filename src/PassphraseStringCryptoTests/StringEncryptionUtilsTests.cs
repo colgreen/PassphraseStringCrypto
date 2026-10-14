@@ -5,7 +5,7 @@ namespace PassphraseStringCryptoTests;
 public class StringEncryptionUtilsTests
 {
     [Fact]
-    public void DecryptTest()
+    public void PublishedCiphertextRemainsCompatible()
     {
         string ciphertextAltBase64 = "VUuW8IKdZkIf4dXHKQ^EadXjuZ4AEkqeg2CYRac#h5TKDZDxcSWE6Mjek2swf6Ra8^DxhgY~qck=";
         string plaintextActual = StringEncryptionUtils.Decrypt(ciphertextAltBase64, "password 123");

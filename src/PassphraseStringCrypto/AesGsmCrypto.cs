@@ -6,6 +6,8 @@ namespace PassphraseStringCrypto;
 
 internal static class AesGsmCrypto
 {
+    public const int HeaderLength = 30;
+    private const int __tagLength = 16;
     private static readonly int[] __keySizes = new int[] { 16, 24, 32 };
 
     public static byte[] Encrypt(Span<byte> plaintext, Span<byte> key)
@@ -26,7 +28,7 @@ internal static class AesGsmCrypto
         //    authTag (16 bytes)
         //    ciphertext (variable length, and described by the dataLen field)
         int dataLen = plaintext.Length;
-        byte[] ciphertext = new byte[30 + dataLen];
+        byte[] ciphertext = new byte[HeaderLength + dataLen];
 
         // Create spans over the various fields/segments within the ciphertext array.
         // Nonce span
@@ -40,8 +42,8 @@ internal static class AesGsmCrypto
         writeIdx += 2;
 
         // Authentication tag span.
-        Span<byte> authTagSpan = ciphertext.AsSpan(writeIdx, 16);
-        writeIdx += 16;
+        Span<byte> authTagSpan = ciphertext.AsSpan(writeIdx, __tagLength);
+        writeIdx += __tagLength;
 
         // Ciphertext span.
         Span<byte> ciphertextSpan = ciphertext.AsSpan(writeIdx, dataLen);
@@ -56,7 +58,7 @@ internal static class AesGsmCrypto
 
         // Initialise an instance of AesCgm, and encrypt the plaintext, writing ciphertext bytes into ciphertextSpan.
         // This will also consume dataLenSpan (as associated data), and write bytes into authTagSpan.
-        AesGcm aesGcm = new AesGcm(key);
+        using AesGcm aesGcm = new AesGcm(key, __tagLength);
         aesGcm.Encrypt(nonceSpan, plaintext, ciphertextSpan, authTagSpan, dataLenSpan);
 
         // Return ciphertext; this is our completed block of scheme specific ciphertext.
@@ -70,7 +72,7 @@ internal static class AesGsmCrypto
             throw new CryptographicException("Unsupported key size.");
         }
 
-        if(ciphertext.Length > ushort.MaxValue){
+        if(ciphertext.Length < HeaderLength || ciphertext.Length > ushort.MaxValue){
             throw new CryptographicException("Ciphertext too long for this crypto scheme.");
         }
 
@@ -84,12 +86,12 @@ internal static class AesGsmCrypto
         readIdx += 2;
 
         // Authentication tag span.
-        Span<byte> authTagSpan = ciphertext.Slice(readIdx, 16);
-        readIdx += 16;
+        Span<byte> authTagSpan = ciphertext.Slice(readIdx, __tagLength);
+        readIdx += __tagLength;
 
         // Read the data length.
         int dataLen = BinaryUtils.ReadUInt16(dataLenSpan);
-        int dataLenActual = ciphertext.Length - 30;
+        int dataLenActual = ciphertext.Length - HeaderLength;
         if(dataLen != dataLenActual) {
             throw new CryptographicException("Ciphertext data length field does not match length of the encrypted.");
         }
@@ -100,7 +102,7 @@ internal static class AesGsmCrypto
         // Initialise an instance of AesCgm, and decrypt the ciphertext, writing plaintext bytes into a new array.
         // This will also consume authTagSpan and associatedDataSpan, and Decrypt() will fail if the associated data has been tampered with in any way.
         byte[] plaintext = new byte[dataLen];
-        AesGcm aesGcm = new AesGcm(key);
+        using AesGcm aesGcm = new AesGcm(key, __tagLength);
         aesGcm.Decrypt(nonceSpan, ciphertextSpan, authTagSpan, plaintext, dataLenSpan);
 
         // Return the decrypted plaintext.

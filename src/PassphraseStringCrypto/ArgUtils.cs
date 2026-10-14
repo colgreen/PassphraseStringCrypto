@@ -65,6 +65,10 @@ internal static class ArgUtils
     private static void PrintHelp()
     {
         Console.WriteLine("Format is:");
+        Console.WriteLine("  producer | scrypto encrypt-stdin > ciphertext.txt");
+        Console.WriteLine("  scrypto decrypt-stdin < ciphertext.txt | consumer");
+        Console.WriteLine("");
+        Console.WriteLine("Legacy compatibility modes (unsafe for secret material):");
         Console.WriteLine("  scrypto encrypt \"<plaintext>\" \"<passphrase>\"");
         Console.WriteLine("  scrypto decrypt \"<ciphertext>\" \"<passphrase>\"");
         Console.WriteLine("");
